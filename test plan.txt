@@ -1,0 +1,50 @@
+Test Plan for Board Class
+=========================
+Objective:
+To ensure the Board class functions correctly as an interface between the Game and the Columns, handling player turns, tower placements, moves, stops, and bust scenarios.
+
+Test Cases:
+1. Board Initialization
+Test 1.1: Verify that the Board constructor initializes 11 Column objects correctly.
+- Expected: `backBone` array should have valid Column pointers for indices 2-12 and NULL for 0 and 1.
+
+Test 1.2: Ensure that all Columns have correct lengths as defined in `Column::columnLengths`.
+- Expected: Each Column should have the proper length.
+
+//—----------------------
+2. Start Turn
+Test 2.1: Call `startTurn(Player*)` and verify:
+  - `currentPlayer` is set correctly.
+  - `towerCount` is set to 0.
+  - `activeTowers` array is reset.
+
+//—----------------------
+3. Move Towers
+Test 3.1: Move to an available column that does not have a tower.
+ - Expected: Tower should be placed at position 1.
+
+Test 3.2: Move in a column where the player already has a tower.
+ - Expected: Tower should advance by one position.
+
+Test 3.3: Try to move in a column that is **Pending or Captured**.
+ - Expected: `move()` no changes should be made.
+
+Test 3.4: Try to move in a new column when all 3 towers are already placed.
+ - Expected: `move()` should return false.
+
+//—---------------------- 
+Test 4: Stop Turn. Call `stop()` when towers are placed.
+- Expected: Towers should be converted into tiles of the player’s color.
+
+//—----------------------
+ 5. Bust Scenario
+Test 5.1: Call `bust()` when the player has active towers.
+ - Expected: The towers should be removed, but previously placed tiles should remain.
+
+Test 5.2: Call `bust()` when there are no towers placed.
+ - Expected: No changes should occur. Progress made by white tower is lost.
+
+
+
+
+
