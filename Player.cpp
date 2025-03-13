@@ -4,8 +4,8 @@
 // ===============================================================
 #include "Player.hpp"
 //-----------------------------------------------------------------
-bool Player::takenColors[5] = {true, false, false, false, false}; // Initialize player color tracking
-vector<string> Player::takenNames = {};  // Initialize player name tracking
+bool Player::takenColors[5] = {true, false, false, false, false}; // used colors
+vector<string> Player::takenNames = {};  // used player names
 
 Player::Player(const string& name, ECcolor color)
                : name(name), color(color), score(0) {
@@ -39,15 +39,6 @@ bool Player::wonColumn(int colNum){
 }
 
 //-----------------------------------------------------------------
-// Print the player name, tile color and score.
-ostream& Player::print(ostream& os) const {
-    os <<"Player Name: " << name
-    <<"\nColor: " <<" \t" <<colorNames[(int)(color)]
-    <<"\nScore: " <<score <<endl;
-    return os;
-}
-
-//-----------------------------------------------------------------
 // Check if a color is already taken
 bool Player::isColorTaken(ECcolor color) {
     int colorIndex = (int)(color);
@@ -76,4 +67,13 @@ string Player::toLowerCase(const string& str) {
     string lowerStr = str;
     transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
     return lowerStr;
+}
+
+//-----------------------------------------------------------------
+// Print the player name, tile color and score.
+ostream& Player::print(ostream& os) const {
+	os <<"Player Name: " << name
+	<<"\nColor: " <<" \t" <<colorNames[(int)(color)]
+	<<"\nScore: " <<score <<endl;
+	return os;
 }

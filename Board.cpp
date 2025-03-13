@@ -5,8 +5,8 @@
 #include "Board.hpp"
 //-----------------------------------------------------------------
 // Constructor: Initializes all columns
-Board::Board():towerCount(0), currentPlayer(nullptr){
-//	Initialize backBone array with column objects (except 0 and 1)
+Board::Board():towers(0), currPlayer(nullptr){
+	// Initialize backBone with column objects
 	backBone[0] = nullptr;
 	backBone[1] = nullptr;
 	for (int m = 2; m <= 12; m++){
@@ -15,7 +15,7 @@ Board::Board():towerCount(0), currentPlayer(nullptr){
 	
 	// Initialize active towers as unused
 	for (int k = 0; k < 3; k++){
-		activeTowers[k] = 0; // 0 - no active towers in that column
+		towerCols[k] = 0; // 0 - no active towers in column
 	}
 }
 
@@ -28,14 +28,14 @@ Board::~Board() {
 }
 
 //-----------------------------------------------------------------
-// Starts a turn by resetting the tower counter and setting the player
+// Reset tower counter and set player for new turn
 void Board::startTurn(Player* player) {
-	currentPlayer = player;
-	towerCount = 0;
+	currPlayer = player;
+	towers = 0;
 
 	// Reset tower tracking
 	for (int m = 0; m < 3; m++) {
-		activeTowers[m] = 0;
+		towerCols[m] = 0;
 	}
 }
 
@@ -54,16 +54,16 @@ bool Board::move(int columnNum) {
 	}
 	// Check if player already has a tower in this column
 	
-	for (int m = 0; m < towerCount; m++) {
-		if (activeTowers[m] == columnNum) {
+	for (int m = 0; m < towers; m++) {
+		if (towerCols[m] == columnNum) {
 			return col->move();  // Move if tower exists
 		}
 	}
 	
 	// If player has unused towers, place one
-	if (towerCount < 3) {
-		if (col->startTower(currentPlayer)) {
-			activeTowers[towerCount++] = columnNum;
+	if (towers < 3) {
+		if (col->startTower(currPlayer)) {
+			towerCols[towers++] = columnNum;
 			return true;
 		}
 	}
@@ -74,32 +74,32 @@ bool Board::move(int columnNum) {
 //-----------------------------------------------------------------
 // Stops the turn and replaces towers with tiles
 void Board::stop() {
-	for (int k = 0; k < towerCount; k++) {
-		int colNum = activeTowers[k];
-		backBone[colNum]->stop(currentPlayer);
+	for (int k = 0; k < towers; k++) {
+		int colNum = towerCols[k];
+		backBone[colNum]->stop(currPlayer);
 	}
 
 	// Reset tower tracking
-	towerCount = 0;
+	towers = 0;
 }
 
 //-----------------------------------------------------------------
 // Resets columns where the player had towers (on a bust)
 void Board::bust() {
-	for (int n = 0; n < towerCount; n++) {
-		int colNum = activeTowers[n];
+	for (int n = 0; n < towers; n++) {
+		int colNum = towerCols[n];
 		backBone[colNum]->bust();
 	}
-	towerCount = 0;
+	towers = 0;
 }
 
 //-----------------------------------------------------------------
 // Print the Board
 ostream& Board::print(ostream& os) {
 	os << "Current Board State \n";
-	os << "Active towers: " << towerCount << endl;
+	os << "Active towers: " << towers << "\n\n";
 	for (int i = 2; i <= 12; i++) {
-		os << *backBone[i] << "\n";
+		os << setw(2) << *backBone[i] << "\n";
 	}
 	return os;
 }

@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------
 class Board {
 private:
-	int towerCount; // number of active towers (max 3)
-	int activeTowers[3]; // column numbers that have towers
-	Column* backBone[13]; // array of column pointers
-	Player* currentPlayer; // pointer to active player
+	int towers; // active towers (max 3)
+	int towerCols[3]; // column with towers
+	Column* backBone[13];
+	Player* currPlayer;
 public:
 	Board();
 	~Board();
@@ -22,6 +22,6 @@ public:
 	ostream& print (ostream& os);
 };
 //  Overload the output operator
-inline ostream& operator<<(ostream& os, Board& board) {
-	return board.print(os);
+inline ostream& operator<<(ostream& os, Board& b) {
+	return b.print(os);
 }

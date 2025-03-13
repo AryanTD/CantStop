@@ -4,19 +4,19 @@
 // ===============================================================
 #include "Column.hpp"
 //-----------------------------------------------------------------
-const int Column::columnLengths[13] = { 0, 0, 3, 5, 7, 9, 11, 13, 11, 9, 7, 5, 3 };
+const int Column::colLen[13] = {0,0,3,5,7,9,11,13,11,9,7,5,3};
 
-Column::Column (int colNum) : columnNumber(colNum), state(ECstate::Available){
+Column::Column (int colNum) : colNum(colNum), state(ECstate::Available){
     if (colNum < 2 || colNum > 12){
-        throw invalid_argument("Column number must be between 2 and 12");
+        fatal("Column number must be between 2 and 12");
     }
 }
 
 //-----------------------------------------------------------------
 // Prints the column state and contents
 ostream& Column::print(ostream& os) const {
-    os << columnNumber << " " << stateNames[(int)(state)];
-    for (int i = 1; i <= columnLengths[columnNumber]; i++) {
+    os << colNum << " " << stateNames[(int)(state)];
+    for (int i = 1; i <= colLen[colNum]; i++) {
         os << "  ";
         for (int j = 0; j < 5; j++) {
             if (squares[j] == i) {
@@ -45,7 +45,7 @@ bool Column::startTower(Player* player) {
 		squares[index] = 0;
 	}
     
-    if (squares[index] >= columnLengths[columnNumber]) {
+    if (squares[index] >= colLen[colNum]) {
         state = ECstate::Pending;
     }
     return true;
@@ -56,10 +56,10 @@ bool Column::startTower(Player* player) {
 bool Column::move() {
 	if (state == ECstate::Captured) return false;
 	
-	if (squares[0] > 0 && squares[0] < columnLengths[columnNumber]) {
+	if (squares[0] > 0 && squares[0] < colLen[colNum]) {
 		squares[0] += 1;  // Move only the tower
 	}
-	if (squares[0] == columnLengths[columnNumber]) {
+	if (squares[0] == colLen[colNum]) {
 		state = ECstate::Pending;
 	}
 	return true;
@@ -76,7 +76,7 @@ void Column::stop(Player* player) {
     if (squares[index] > 0) {
         if (state == ECstate::Pending) {
             state = ECstate::Captured;
-            player->wonColumn(columnNumber);
+            player->wonColumn(colNum);
         }
     }
 }
@@ -84,10 +84,10 @@ void Column::stop(Player* player) {
 //-----------------------------------------------------------------
 // Reset squares on bust
 void Column::bust() {
-	// Remove the player's tower for this turn (reset the first element of squares array)
-	squares[0] = 0;  // Reset the player's tower for the current turn. Previous progress is kept intact
-	// If the column is not captured and the tower has been removed, it stays in the 'Available' state.
+	// Remove the player's tower for this turn
+	squares[0] = 0;
+	// If the column is not captured
 	if (state == ECstate::Pending) {
-		state = ECstate::Available;  // Revert to Available if the column wasn't captured
+		state = ECstate::Available;
 	}
 }

@@ -23,6 +23,6 @@ public:
 };
 
 //    Overload the output operator
-inline ostream& operator<<(ostream& os, Dice& dice) {
-    return dice.print(os);
+inline ostream& operator<<(ostream& os, Dice& d) {
+    return d.print(os);
 }

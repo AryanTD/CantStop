@@ -12,17 +12,17 @@ private:
     ECcolor color;
     int score;
     int scoreboard[3];
-    static bool takenColors[5]; // Track if colors are used (Index: 0=White, 1=Orange, 2=Blue, 3=Yellow, 4=Green
+    static bool takenColors[5]; // Track used colors
     static vector<string> takenNames; // Track used player names
-    static string toLowerCase(const string& str); // Helper function to convert string to lowercase
+    static string toLowerCase(const string& str); // Converts string to lowercase
     
 public:
     Player(const string& playerName, ECcolor playerColor);
 	~Player() = default;
     
 //    Accessor functions
-	ECcolor getColor() const { return color; } // Get the tile color of the player.
-	int getScore() const { return score; } // Get the score of the player.
+	ECcolor getColor() const { return color; } // Get player's tile color
+	int getScore() const { return score; } // Get player's score
     
 //  stores the number of captured columns
     bool wonColumn(int colNum);
@@ -37,6 +37,6 @@ public:
 };
 
 //  Overload the output operator
-inline ostream& operator<<(ostream& os, const Player& player) {
-    return player.print(os);
+inline ostream& operator<<(ostream& os, const Player& p) {
+    return p.print(os);
 }
